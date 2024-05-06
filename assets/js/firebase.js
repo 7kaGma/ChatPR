@@ -26,17 +26,44 @@ Database
 const db = getDatabase(app);
 const dbRef = ref(db, "chat");
 
-/*Databaseへの登録*/
+/*クリックイベントによるDatabaseへの登録*/
 $("#submit").on("click",function(){
   let time = Date.now();
   let today = Date(time);
-
+  //データとして渡すオブジェクトの定義
   const post = {
     text:$("#text").val(),
     time:today
   }  
-  
+  //データベースのノード作成と書き込み
   const newPostRef= push(dbRef);
   set(newPostRef,post);
-
+ //textareaのリセット
+  $("#text").val("");
 });
+
+/*Postフォーマットの関数式*/
+function format (key,post){
+  const postframe = document.createElement('div');
+  postframe.className = 'post';
+  postframe.setAttribute("id",key);
+  const posttime = document.createElement('p');
+  posttime.className = 'postTime';
+  posttime.textContent = post.time;
+  const posttext = document.createElement('p');
+  posttext.className = 'postText';
+  posttext.textContent = post.text;
+  //構造化
+  postframe.appendChild(posttime);
+  postframe.appendChild(posttext);
+  //挿入
+  const inserted = document.getElementById("postBox");
+  inserted.prepend(postframe);
+}
+
+/*データの取得*/
+onChildAdded(dbRef,function(data){
+  const key = data.val();
+  const post = data.val();
+  format(key,post);
+})

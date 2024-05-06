@@ -13,25 +13,33 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
 </head>
 
 <body>
   <header>
+    <h1>Amema</h1>
 
   </header>
   <main>
     <div class="frame">
-      <div id="box" class="container">
-
-      </div>
       <div class="textArea">
         <div class="text-container">
           <textarea id="text" class="form" maxlength="140" placeholder="What's new?" oninput="tBoxResize()"></textarea>
           <button id="submit" class="btn primaryBtn">投稿する</button>
         </div>
       </div>
+      <div id="postBox" class="postArea">
+        <div class="post">
+          <p class="postTime">aaa</p>
+          <p class="postText">今日はお家でご飯を食べました</p>
+        </div>
+      </div>
     </div>
   </main>
+
   <!-- jQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <!-- Firebase -->
