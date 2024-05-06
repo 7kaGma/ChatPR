@@ -52,6 +52,11 @@ body{
   border: #357A00 solid 2px;
   color: #357A00;
 }
+
+a:hover{
+  filter: brightness(0.8);
+}
+
 /*header*/
 header{
   width: 100vw;
