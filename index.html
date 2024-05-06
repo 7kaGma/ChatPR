@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="./assets/css/reset.css">
   <!-- CSS -->
   <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,18 +20,25 @@
 
   </header>
   <main>
-    <div id="box" class="container">
+    <div class="frame">
+      <div id="box" class="container">
 
-    </div>
-    <div>
-      <input type="text">
-      <button>投稿する</button>
+      </div>
+      <div class="textArea">
+        <div class="text-container">
+          <textarea id="text" class="form" maxlength="140" placeholder="What's new?" oninput="tBoxResize()"></textarea>
+          <button id="submit" class="btn primaryBtn">投稿する</button>
+        </div>
+      </div>
     </div>
   </main>
   <!-- jQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <!-- FirebaseとJavascript -->
-  <script type="module" src="./assets/js/common.js"></script>
+  <!-- Firebase -->
+  <!-- <script type="module" src="assets/js/firebase.js"></script> -->
+  <!-- Javascript -->
+  <script src="./assets/js/common.js"></script>
+
 
 </body>
 

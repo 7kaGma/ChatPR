@@ -1,1 +1,110 @@
 @charset "UTF-8";
+
+
+/*スタイルの削除*/
+button{
+  padding: 0;
+  border: none;
+  outline: none;
+  font: inherit;
+  color: inherit;
+  background: none
+}
+
+textarea{
+  margin: 0;
+  padding: 0;    
+  border: none;
+  border-radius: 0;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+/*全体の設定*/
+html{
+  font-size: 62.5%;
+}
+body{
+  font-size: 1.6rem;
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+/*コンポーネント*/
+
+.btn{
+  text-align: center;
+  line-height: 50px;
+  height: 50px;
+  width:150px ;
+  border-radius: 20px;
+}
+.btn:hover{
+  filter: brightness(0.8);
+  cursor: pointer;
+}
+.primaryBtn{
+  background-color: #357A00;
+  color: white;
+}
+.secondaryBtn{
+  background-color: white;
+  border: #357A00 solid 2px;
+  color: #357A00;
+}
+/*header*/
+header{
+  width: 100vw;
+  height: 70px;
+  background-color: white;
+  position: fixed;
+}
+/*main*/
+main{
+  background-color: #f2f2f2;
+  width: 100vw;
+  height: 200vh;
+  padding-top: 70px;
+  box-sizing: border-box;
+}
+.frame{
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  padding-inline: 20px;
+  box-sizing: border-box;
+}
+/*投稿欄*/
+.textArea{
+  width: 520px;
+  height: 100%;
+}
+.text-container{
+  width: 520px; 
+  padding: 40px 10px;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+#text{
+  width: 500px;
+  height: auto;
+  max-height: 250px;
+  resize: none;
+  border: none;
+  font-size: 2.0rem;
+  margin-block-end: 20px;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  line-height: 1.5;
+  font-family: "Noto Sans JP", sans-serif;
+  overflow: hidden;
+}
+
+
+/*投稿文テンプレート*/
