@@ -29,7 +29,7 @@ const auth = getAuth();
 $("#login").on('click',function(){
     signInWithPopup(auth, provider)
     .then((result) => {
-      location.href="../../login.html";
+      location.href="./login.html";
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
       const user = result.user;
@@ -44,7 +44,7 @@ $("#login").on('click',function(){
   /*ログアウト処理*/
   $("#logout").on('click',function(){
     signOut(auth).then(()=>{
-    location.href="../../index.html";
+    location.href="./index.html";
   }).catch((error)=>{
     console.log(error);
   });
