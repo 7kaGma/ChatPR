@@ -21,13 +21,14 @@
 <body>
   <header>
     <h1>Amema</h1>
-
+    <button id="logout" class="btn secondaryBtn">ログアウト</button>
   </header>
   <main>
     <div class="frame">
       <div class="textArea">
         <div class="text-container">
-          <button id="login" class="btn primaryBtn">ログインする</button>
+          <textarea id="text" class="form" maxlength="140" placeholder="What's new?" oninput="tBoxResize()"></textarea>
+          <button id="submit" class="btn primaryBtn">投稿する</button>
         </div>
       </div>
       <div id="postBox" class="postArea">
