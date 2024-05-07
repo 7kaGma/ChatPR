@@ -5,7 +5,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/fireba
 // RealtimeDatabase
 import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved, onValue  } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
 // Autentication
-
+import { getAuth,signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -20,9 +20,38 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-/*==========
-Database
-==========*/
+/* GoogleAuth*/
+const provider = new GoogleAuthProvider();
+const auth = getAuth();
+
+/*Googleログイン処理*/
+//https://firebase.google.com/docs/auth/web/google-signin?hl=ja
+$("#login").on('click',function(){
+    signInWithPopup(auth, provider)
+    .then((result) => {
+      location.href="../../index.html";
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      const user = result.user;
+    }).catch((error) => {
+      const errorCode = error.code;
+      errorMessage = error.message;
+      const email = error.customData.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
+    });
+});
+
+  /*ログアウト処理*/
+  $("#logout").on('click',function(){
+    signOut(auth).then(()=>{
+    location.href="../../login.html";
+  }).catch((error)=>{
+    console.log(error);
+  });
+  });
+
+/*Database*/
+/*rule→閲覧は自由にできる、書き込みはログインユーザーのみ*/
 const db = getDatabase(app);
 const dbRef = ref(db, "chat");
 
@@ -66,4 +95,4 @@ onChildAdded(dbRef,function(data){
   const key = data.val();
   const post = data.val();
   format(key,post);
-})
+});
