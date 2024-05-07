@@ -49,6 +49,18 @@ $("#login").on('click',function(){
     console.log(error);
   });
   });
+  /*ユーザー名の取得*/
+  onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    console.log(uid);
+    if(user !==null){
+      const namae =user.displayName;
+      console.log(namae);
+      $("#username").text(namae);
+    }
+  }
+});
 
 /*Database*/
 /*rule→閲覧は自由にできる、書き込みはログインユーザーのみ*/
@@ -62,8 +74,9 @@ $("#submit").on("click",function(){
   //データとして渡すオブジェクトの定義
   const post = {
     text:$("#text").val(),
-    time:today
-  }  
+    time:today,
+    username:$("#username").text()
+    }  
   //データベースのノード作成と書き込み
   const newPostRef= push(dbRef);
   set(newPostRef,post);
@@ -77,6 +90,9 @@ function format (key,post){
   const postframe = document.createElement('div');
   postframe.className = 'post';
   postframe.setAttribute("id",key);
+  const postname = document.createElement('p');
+  postname.className='postName';
+  postname.textContent = post.username;
   const posttime = document.createElement('p');
   posttime.className = 'postTime';
   posttime.textContent = post.time;
@@ -84,6 +100,7 @@ function format (key,post){
   posttext.className = 'postText';
   posttext.textContent = post.text;
   //構造化
+  postframe.appendChild(postname);
   postframe.appendChild(posttime);
   postframe.appendChild(posttext);
   //挿入
