@@ -135,6 +135,10 @@ main{
   overflow: hidden;
 }
 
+#input-files{
+  margin-bottom: 20px;
+}
+
 
 /*投稿文テンプレート*/
 .postArea{
@@ -150,12 +154,11 @@ main{
 .post{
   width: 500px;
   height:auto;
-  max-height: 300px;
   box-sizing: border-box;
   margin-block-end: 20px;
   background-color: white;
   border-radius: 20px;
-  padding: 20px 20px;
+  padding: 20px;
   line-height: 1.5;
 }
 .postTime{
@@ -164,11 +167,18 @@ main{
 }
 .postText{
   font-size: 2.0rem;
+  margin-block-end: 10px;
 }
 
 .postName{
   font-size: 1.6rem;
   font-weight: bold;
+}
+
+.postImage{
+  display: block;
+  width: 80%;
+  margin: 0 auto;
 }
 
 /*footer*/

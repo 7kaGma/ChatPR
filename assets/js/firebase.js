@@ -6,7 +6,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/fireba
 import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved, onValue  } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
 // Autentication
 import { getAuth,signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-
+//Storage
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyD084xtONTFcO5v3_bY6H4jtMVlBaGkyuQ",
@@ -30,9 +31,9 @@ $("#login").on('click',function(){
     signInWithPopup(auth, provider)
     .then((result) => {
       location.href="./login.html";
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      const user = result.user;
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      // const token = credential.accessToken;
+      // const user = result.user;
     }).catch((error) => {
       const errorCode = error.code;
       errorMessage = error.message;
@@ -62,55 +63,107 @@ $("#login").on('click',function(){
   }
 });
 
+//ファイルをStorageに置く設定
+const storage = getStorage(app);
+$("#input-files").on("change", function(e) {
+  const file = e.target.files[0];
+  const storageRef = sRef(storage, 'images/' + file.name); // 'images/'は任意のパス
+  uploadBytes(storageRef, file).then((snapshot) => {
+  console.log('Uploaded a blob or file!');
+  });
+}); 
+
+
+
 /*Database*/
 /*rule→閲覧は自由にできる、書き込みはログインユーザーのみ*/
 const db = getDatabase(app);
 const dbRef = ref(db, "chat");
 
-/*クリックイベントによるDatabaseへの登録*/
-$("#submit").on("click",function(){
+/*クリックイベントによるDatabaseへの登録*/ 
+$("#submit").on("click",async function(){
+  //画像取得の処理
+  let imageUrl = "";
+  if (document.getElementById('input-files').files.length > 0) {
+    const file = document.getElementById('input-files').files[0];
+    const storageRef = sRef(storage, 'images/' + file.name);
+    try{
+      const snapshot = await uploadBytes(storageRef, file);
+      imageUrl = await getDownloadURL(snapshot.ref);
+    } catch (error) {
+      console.error('Error uploading file and getting download URL', error);
+    }
+  }
+
   let time = Date.now();
   let today = Date(time);
   //データとして渡すオブジェクトの定義
   const post = {
     text:$("#text").val(),
     time:today,
-    username:$("#username").text()
+    username:$("#username").text(),
+    image:imageUrl
     }  
   //データベースのノード作成と書き込み
   const newPostRef= push(dbRef);
   set(newPostRef,post);
- //textareaのリセット
+ //textareaなどのリセット
   $("#text").val("");
-  // location.reload();
+  $("#input-files").val("");
 });
 
-/*Postフォーマットの関数式*/
+/*==========
+formatの関数式
+1.フレームとして下記を生成
+<div id = key class="post">
+  <p class="postName"></P>
+  <p class="postTime"></P>
+  <p class="postText"></P>
+</div>
+2.各要素のテクストにオブジェクト変数post(onChildAddedで「data.val()」として定義)の各値を入れる
+==========*/
+
 function format (key,post){
+  // 枠組みの要素の生成
+  //大枠のdiv
   const postframe = document.createElement('div');
   postframe.className = 'post';
   postframe.setAttribute("id",key);
   const postname = document.createElement('p');
+  //ユーザーネームを記述するpタグ
   postname.className='postName';
   postname.textContent = post.username;
   const posttime = document.createElement('p');
+  // 投稿時間を記述するpタグ
   posttime.className = 'postTime';
   posttime.textContent = post.time;
+  //投稿内容を記述するpタグ
   const posttext = document.createElement('p');
   posttext.className = 'postText';
   posttext.textContent = post.text;
-  //構造化
-  postframe.appendChild(postname);
-  postframe.appendChild(posttime);
-  postframe.appendChild(posttext);
-  //挿入
+    //構造化
+    postframe.appendChild(postname);
+    postframe.appendChild(posttime);
+    postframe.appendChild(posttext);
+  //imageタグの追加
+  if(post.image !== "" ){
+  const postImage = document.createElement('img');
+  postImage.className = 'postImage';
+  const imagePass = post.image;
+  postImage.setAttribute('src',imagePass);
+  postframe.appendChild(postImage);
+  }
+  
+  //該当箇所のhtmlに挿入
   const inserted = document.getElementById("postBox");
   inserted.prepend(postframe);
 }
 
-/*データの取得*/
+/*==========
+onChildAddedでデータの取得とformatの実行
+==========*/
 onChildAdded(dbRef,function(data){
-  const key = data.val();
+  const key = data.key;
   const post = data.val();
   format(key,post);
 });
