@@ -1,3 +1,8 @@
+/*==========
+グローバル変数
+==========*/
+let like = 0;
+
 /*=========
 Firebaseの設定
 ==========*/
@@ -80,6 +85,7 @@ $("#input-files").on("change", function(e) {
 const db = getDatabase(app);
 const dbRef = ref(db, "chat");
 
+
 /*クリックイベントによるDatabaseへの登録*/ 
 $("#submit").on("click",async function(){
   //画像取得の処理
@@ -129,12 +135,29 @@ function format (key,post){
   const postframe = document.createElement('div');
   postframe.className = 'post';
   postframe.setAttribute("id",key);
-  const postname = document.createElement('p');
+  
+  //ユーザーネームとheartを囲うdiv
+  const postnameFrame =document.createElement('div');
+  postnameFrame.className='postNameFrame';
   //ユーザーネームを記述するpタグ
+  const postname = document.createElement('p');
   postname.className='postName';
   postname.textContent = post.username;
-  const posttime = document.createElement('p');
+  //heartArea
+  const heartarea = document.createElement('div');
+  heartarea.className='heartArea';
+  //heartマークの大枠
+  const heartbox = document.createElement('div');
+  heartbox.className='heartBox';
+  //heartマーク
+  const heartCore = document.createElement('p');
+  heartCore.className='core';
+  //heartカウント
+  const heartCount = document.createElement('p');
+  heartCount.className='heartCount';
+  heartCount.textContent = 0;
   // 投稿時間を記述するpタグ
+  const posttime = document.createElement('p');
   posttime.className = 'postTime';
   posttime.textContent = post.time;
   //投稿内容を記述するpタグ
@@ -142,7 +165,12 @@ function format (key,post){
   posttext.className = 'postText';
   posttext.textContent = post.text;
     //構造化
-    postframe.appendChild(postname);
+    heartbox.appendChild(heartCore);
+    heartarea.appendChild(heartbox);
+    heartarea.appendChild(heartCount);
+    postnameFrame.appendChild(postname);
+    postnameFrame.appendChild(heartarea);
+    postframe.appendChild(postnameFrame);
     postframe.appendChild(posttime);
     postframe.appendChild(posttext);
   //imageタグの追加
@@ -153,12 +181,40 @@ function format (key,post){
   postImage.setAttribute('src',imagePass);
   postframe.appendChild(postImage);
   }
-  
+
   //該当箇所のhtmlに挿入
   const inserted = document.getElementById("postBox");
   inserted.prepend(postframe);
+
+  //addEventListenerの設定
+  document.querySelector('.heartBox').addEventListener('click',function(){
+    const core = document.querySelector('.core');
+    core.classList.toggle('active');
+    if (core.classList.contains('active')) {
+      const count = document.querySelector('.heartCount');
+      let likeNow = Number(count.textContent);
+      likeNow ++;
+      count.textContent = likeNow;
+      like = likeNow;
+    } else {
+      const count = document.querySelector('.heartCount');
+      let likeNow = Number(count.textContent);
+      likeNow --;
+      count.textContent = likeNow;
+      like = likeNow;
+    }
+  });
 }
 
+function likedb (){
+  const dbRef2 = ref(db,"like");
+  const newdbRef2=push(dbRef2);
+  const heartCount = document.querySelector(".heartCount").textContent;
+  console.log(heartCount);
+  const likeCount = Number(heartCount);
+  console.log(likeCount);
+  set(newdbRef2,likeCount);
+}
 /*==========
 onChildAddedでデータの取得とformatの実行
 ==========*/
@@ -166,4 +222,5 @@ onChildAdded(dbRef,function(data){
   const key = data.key;
   const post = data.val();
   format(key,post);
+  likedb();
 });

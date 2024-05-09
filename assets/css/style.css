@@ -161,6 +161,67 @@ main{
   padding: 20px;
   line-height: 1.5;
 }
+
+.postNameFrame{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.postName{
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+/*ここからheart*/
+.heartArea{
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  text-align: center;
+}
+
+.heartBox {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.core {
+  margin: 0 auto;
+  width: 18px;
+  height: 18px;
+  background-color: lightgray;
+  position: relative;
+  box-sizing: border-box;
+  transform: translateY(7.2px) rotate(-45deg);
+}
+
+.core::before {
+  position: absolute;
+  top: -9px;
+  left: 0px;
+  content: "";
+  width: 18px;
+  height: 18px;
+  background-color: lightgray;
+  box-sizing: border-box;
+  border-radius: 50% 50% 0 0;
+}
+
+.core::after {
+  transform: rotate(90deg);
+  position: absolute;
+  left: 9px;
+  content: "";
+  width: 18px;
+  height: 18px;
+  background-color: lightgray;
+  box-sizing: border-box;
+  border-radius: 50% 50% 0 0;
+}
+/*ここまでheart*/
+
 .postTime{
   font-size: 1.2rem;
   margin-block-end: 10px;
@@ -169,16 +230,42 @@ main{
   font-size: 2.0rem;
   margin-block-end: 10px;
 }
-
-.postName{
-  font-size: 1.6rem;
-  font-weight: bold;
-}
-
 .postImage{
   display: block;
   width: 80%;
   margin: 0 auto;
+}
+
+/*heartのインタラクト*/
+
+.heartBox:hover {
+  filter: brightness(0.8);
+}
+.core.active {
+  background-color: red;
+  animation: heart 0.5s;
+}
+
+.core.active::after {
+  background-color: red;
+}
+
+.core.active::before {
+  background-color: red;
+}
+
+@keyframes heart {
+  0% {
+    transform: scale(1) translateY(7.2px) rotate(-45deg);
+  }
+
+  50% {
+    transform: scale(1.25) translateY(7.2px) rotate(-45deg);
+  }
+
+  100% {
+    transform: scale(1) translateY(7.2px) rotate(-45deg);
+  }
 }
 
 /*footer*/
